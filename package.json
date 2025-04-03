@@ -1,6 +1,6 @@
 {
   "name": "native-styled-components",
-  "version": "0.1.0",
+  "version": "0.1.0-beta.1",
   "description": "Styled components to React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -38,7 +38,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace native-styled-components-example",
+    "build": "tsc",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
@@ -73,7 +73,8 @@
     "@react-native/eslint-config": "^0.78.0",
     "@release-it/conventional-changelog": "^9.0.2",
     "@types/jest": "^29.5.5",
-    "@types/react": "^19.0.12",
+    "@types/react": "^19.1.0",
+    "@types/react-native": "^0.73.0",
     "commitlint": "^19.6.1",
     "del-cli": "^5.1.0",
     "eslint": "^9.22.0",

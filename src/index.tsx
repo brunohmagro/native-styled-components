@@ -1,3 +1,8 @@
-export function multiply(a: number, b: number): number {
-  return a * b;
-}
+import { styled } from './styles/createStyles';
+import { ThemeProvider } from './components/ThemeProvider';
+
+// Exportando a função styled
+export { styled };
+
+// Exportando o ThemeProvider
+export { ThemeProvider };
