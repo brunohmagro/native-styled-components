@@ -1,5 +1,5 @@
 {
-  "name": "native-styled-components",
+  "name": "react-native-styled-components",
   "version": "0.0.1",
   "description": "Styled components to React Native",
   "source": "./src/index.tsx",
