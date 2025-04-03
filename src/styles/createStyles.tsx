@@ -8,18 +8,58 @@ type StyledComponentProps = {
   children?: React.ReactNode;
 };
 
-// Função para criar um componente estilizado
+const parseStyles = (styleString: string): ViewStyle | TextStyle => {
+  const styles: { [key: string]: string | number } = {};
+  const rules = styleString.split(';');
+
+  rules.forEach((rule) => {
+    const [property, value] = rule.split(':').map((item) => item.trim());
+    if (property && value) {
+      const camelCaseProperty = property.replace(/-([a-z])/g, (g) =>
+        String(g[1]).toUpperCase()
+      );
+
+      const numericValue = parseFloat(value);
+      styles[camelCaseProperty] = isNaN(numericValue) ? value : numericValue;
+    }
+  });
+
+  return styles;
+};
 const createStyledComponent = <P extends object>(
-  Component: React.ComponentType<P> | React.ElementType // Aceita tanto componentes quanto elementos HTML
+  Component: React.ComponentType<P> | React.ElementType
 ) => {
-  return (styles: (props: P) => ViewStyle | TextStyle) => {
+  return (
+    styles: TemplateStringsArray | ((props: P) => ViewStyle | TextStyle)
+  ) => {
     const StyledComponent = ({
       style,
       children,
       ...props
     }: StyledComponentProps & P) => {
-      // Combina os estilos fornecidos com os estilos gerados pela função `styles`
-      const combinedStyles = StyleSheet.flatten([styles(props as P), style]);
+      const computedStyles =
+        typeof styles === 'function' ? styles(props as P) : styles;
+
+      const processedStyles = Array.isArray(computedStyles)
+        ? parseStyles(computedStyles.join(''))
+        : computedStyles;
+
+      const isObject = (
+        styleObject: any
+      ): styleObject is ViewStyle | TextStyle => {
+        return (
+          styleObject &&
+          typeof styleObject === 'object' &&
+          !Array.isArray(styleObject) &&
+          styleObject !== null
+        );
+      };
+
+      const combinedStyles = StyleSheet.flatten([
+        isObject(processedStyles) ? processedStyles : {},
+        style || {},
+      ]);
+
       return (
         <Component style={combinedStyles} {...props}>
           {children}
@@ -27,13 +67,11 @@ const createStyledComponent = <P extends object>(
       );
     };
 
-    // Define o displayName para facilitar a depuração
     StyledComponent.displayName = `Styled(${(Component as React.ComponentType).displayName || (Component as any).name || 'Unknown'})`;
     return StyledComponent;
   };
 };
 
-// Exporta os componentes estilizados
 export const styled = {
   View: createStyledComponent(View),
   Text: createStyledComponent(Text),
