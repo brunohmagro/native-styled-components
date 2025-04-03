@@ -7,13 +7,13 @@ Uma biblioteca para estilização de componentes no React Native, inspirada no `
 Para instalar a biblioteca, use o npm ou yarn:
 
 ```bash
-npm install my-styled-components-replacement
+npm install native-styled-components
 ```
 
 ou
 
 ```bash
-yarn add my-styled-components-replacement
+yarn add native-styled-components
 ```
 
 ## Uso
@@ -23,7 +23,7 @@ yarn add my-styled-components-replacement
 Importe os componentes e o `ThemeProvider` da biblioteca:
 
 ```javascript
-import { styled, ThemeProvider, defaultTheme } from 'my-styled-components-replacement';
+import { styled, ThemeProvider, defaultTheme } from 'native-styled-components';
 ```
 
 ### Criando Componentes Estilizados
