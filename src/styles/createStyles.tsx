@@ -96,7 +96,7 @@ const parseStyles = (
 const createStyledComponent = <P extends object>(
   Component: React.ComponentType<P> | React.ElementType
 ) => {
-  return <CustomProps extends object>(
+  const styledComponent = <CustomProps extends object>(
     styles:
       | TemplateStringsArray
       | ((props: P & CustomProps) => ViewStyle | TextStyle),
@@ -128,6 +128,56 @@ const createStyledComponent = <P extends object>(
     StyledComponent.displayName = `Styled(${(Component as React.ComponentType).displayName || (Component as any).name || 'Unknown'})`;
     return StyledComponent;
   };
+
+  styledComponent.attrs = <A extends object = {}>(
+    attrs: ((props: P & A) => Partial<P>) | Partial<P>
+  ) => {
+    return <T extends object = {}>(
+      styles:
+        | TemplateStringsArray
+        | ((props: P & A & T) => ViewStyle | TextStyle),
+      ...interpolations: Array<
+        | ViewStyle
+        | TextStyle
+        | ((props: P & A & T) => ViewStyle | TextStyle | string)
+      >
+    ) => {
+      const StyledComponentWithAttrs = ({
+        style,
+        children,
+        ...props
+      }: StyledComponentProps<P & A & T>) => {
+        const computedAttrs =
+          typeof attrs === 'function' ? attrs(props as P & A) : attrs;
+        const computedStyles =
+          typeof styles === 'function'
+            ? styles(props as P & A & T)
+            : parseStyles(styles, ...interpolations)(props);
+
+        const combinedStyles = StyleSheet.flatten([computedStyles, style]);
+
+        return (
+          <Component
+            style={combinedStyles}
+            {...computedAttrs}
+            {...(props as P)}
+          >
+            {children}
+          </Component>
+        );
+      };
+
+      StyledComponentWithAttrs.displayName = `Styled(${
+        (Component as React.ComponentType).displayName ||
+        (Component as any).name ||
+        'Unknown'
+      })`;
+
+      return StyledComponentWithAttrs;
+    };
+  };
+
+  return styledComponent;
 };
 
 export const styled = {
