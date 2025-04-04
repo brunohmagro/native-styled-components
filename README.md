@@ -1,85 +1,123 @@
-# My Styled Components Replacement
+# Native Styled Components
 
-Uma biblioteca para estilização de componentes no React Native, inspirada no `styled-components`. Permite a criação de componentes estilizados de forma modular e reutilizável.
+Uma biblioteca de estilização para React Native inspirada no styled-components, permitindo que você escreva estilos reais de CSS em seus componentes.
 
 ## Instalação
-
-Para instalar a biblioteca, use o npm ou yarn:
 
 ```bash
 npm install native-styled-components
 ```
 
-ou
-
-```bash
-yarn add native-styled-components
-```
-
 ## Uso
 
-### Importação
+### Estilização Básica
 
-Importe os componentes e o `ThemeProvider` da biblioteca:
+```jsx
+import { styled } from 'native-styled-components';
 
-```javascript
-import { styled, ThemeProvider, defaultTheme } from 'native-styled-components';
-```
+// Crie um componente View com estilos
+const StyledView = styled.View`
+  flex: 1;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+`;
 
-### Criando Componentes Estilizados
+// Crie um componente Text com estilos
+const StyledText = styled.Text`
+  color: #333;
+  font-size: 16px;
+`;
 
-Você pode criar componentes estilizados usando a função `styled`:
-
-```javascript
-const StyledView = styled.View((props) => ({
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: props.theme.colors.background,
-}));
-
-const StyledText = styled.Text((props) => ({
-  color: props.theme.colors.text,
-  fontSize: 16,
-}));
-```
-
-### Usando o ThemeProvider
-
-Para aplicar um tema, envolva seus componentes com o `ThemeProvider`:
-
-```javascript
+// Use os componentes em sua aplicação
 const App = () => (
-  <ThemeProvider theme={defaultTheme}>
-    <StyledView>
-      <StyledText>Olá, mundo!</StyledText>
-    </StyledView>
-  </ThemeProvider>
+  <StyledView>
+    <StyledText>Olá, Native Styled Components!</StyledText>
+  </StyledView>
 );
 ```
 
-## Temas
+### Estilização Baseada em Props
 
-Você pode definir temas personalizados e usar o tema padrão fornecido:
+```jsx
+const Button = styled.TouchableOpacity`
+  background-color: ${props => props.primary ? '#007AFF' : '#fff'};
+  padding: 10px 20px;
+  border-radius: 5px;
+`;
 
-```javascript
-export const defaultTheme = {
-  colors: {
-    background: '#f0f0f0',
-    primary: '#6200ee',
-    text: '#000',
-  },
-};
+const ButtonText = styled.Text`
+  color: ${props => props.primary ? '#fff' : '#007AFF'};
+  font-size: 16px;
+`;
+
+// Uso
+<Button primary>
+  <ButtonText primary>Botão Primário</ButtonText>
+</Button>
 ```
 
-## Contribuição
+### Atributos (.attrs)
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir um issue ou um pull request.
+```jsx
+const ScrollContainer = styled.ScrollView.attrs(({ theme }) => ({
+  contentContainerStyle: {
+    padding: theme.spacing.md,
+    alignItems: 'center',
+  },
+}))`
+  flex: 1;
+  background-color: #f5f5f5;
+`;
+```
+
+## Componentes Suportados
+
+Atualmente, suportamos os seguintes componentes do React Native:
+
+- `View`
+- `Text`
+- `TouchableOpacity`
+- `TouchableHighlight`
+- `ScrollView`
+- `FlatList`
+- `Image`
+- `ImageBackground`
+- `TextInput`
+- `Button`
+- `Pressable`
+- `SafeAreaView`
+- `KeyboardAvoidingView`
+- `Modal`
+- `ActivityIndicator`
+- `Switch`
+- `RefreshControl`
+- `SectionList`
+- `VirtualizedList`
+
+## Funcionalidades Implementadas
+
+- ✅ Estilização básica com template literals
+- ✅ Suporte a props dinâmicas
+- ✅ Atributos (.attrs)
+- ✅ Suporte a valores numéricos e strings
+- ✅ Conversão automática de kebab-case para camelCase
+- ✅ Flatten de estilos automático
+- ✅ Suporte a múltiplos componentes React Native
+- ✅ TypeScript support
+
+## Limitações Atuais
+
+- ⚠️ Não suporta aninhamento de estilos (nested styles)
+- ⚠️ Não suporta keyframes
+- ⚠️ Não suporta temas globais
+- ⚠️ Não suporta extensão de componentes estilizados
+- ⚠️ Não suporta server-side rendering
+
+## Contribuindo
+
+Contribuições são sempre bem-vindas! Por favor, leia nossas diretrizes de contribuição antes de submeter um PR.
 
 ## Licença
 
-Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+MIT © [Bruno Henrique Magro]
